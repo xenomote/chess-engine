@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.2.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: cd54efb276e654f8a0b46996bfaf723e4916f69c0b78c264af735b6465c0b3ac
+-- hash: f16fec319e59bc8be28b703c1e55533ba9d141796ce7eaa71bef90cf05c134d3
 
 name:           chess-engine
 version:        0.1.0.0
@@ -28,6 +28,7 @@ source-repository head
 library
   exposed-modules:
       Board
+      MinMax
       Piece
       Position
       Rules

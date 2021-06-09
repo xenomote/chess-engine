@@ -1,16 +1,35 @@
 module Rules (
-    moves, inCheck, inCheckMate
+    validMoves, inCheck, inCheckMate
 ) where
+
+import Data.Maybe
 
 import Board
 import Piece
+import Position
 
-moves :: Board -> Colour -> [Board]
-moves board activePlayer
+validMoves :: Board -> Colour -> [Board]
+validMoves board activePlayer
   | inCheckMate board activePlayer  = []        -- cannot move
-  | inCheck board activePlayer      = undefined -- defend the check
-  | otherwise                       = undefined -- normal moves
+  | inCheck board activePlayer      = undefined -- must defend the check
+  | otherwise                       = undefined
+
+{-
+king
+queen
+bishop
+knight - not blocked by other pieces
+rook
+pawn step
+pawn double step - only on first move
+pawn take
+en passant - only on the move after a double move
+castling - only if the rook and king havent moved, cannot castle through check, can castle with rook under attack
+-}
+
+defendingMoves :: Board -> Colour -> [Board]
+defendingMoves = undefined
 
 inCheck, inCheckMate :: Board -> Colour -> Bool
 inCheck = undefined
-inCheckMate = undefined
+inCheckMate board colour = inCheck board colour && null (defendingMoves board colour)
