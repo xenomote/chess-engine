@@ -1,34 +1,40 @@
 module Board (
-    Board, at, start
+    Board, on, place, remove, move, empty, initial,
 ) where
 
-import Data.List
+import Data.List ( find )
+import Data.Function ((&))
+import Control.Arrow ( Arrow((&&&)), (>>>) )
 
-import Sequence
-import Piece
-import Position
+import Sequence ( Sequence(values) )
+import Position ( Rank(R1, R8, R7, R2), Position(Position) )
+import Piece ( Colour(Black, White), Kind(Pawn, King, Queen, Bishop, Knight, Rook), Piece(Piece) )
 
 type Board = [(Piece, Position)]
 
-at :: Board -> Position -> Maybe Piece
-board `at` position = fst <$> find ((== position) . snd) board
+on :: Position -> Board -> Maybe Piece
+position `on` board = fst <$> find ((== position) . snd) board
 
-place :: Board -> Piece -> Position -> Board
-place board piece position = (:) (piece, position) $ remove board position
+place :: Piece -> Position -> Board -> Board
+place piece position board = (:) (piece, position) $ remove position board
 
-remove :: Board -> Position -> Board
-remove board position = filter ((/= position) . snd) board
+remove :: Position -> Board -> Board
+remove position = filter ((/= position) . snd)
 
-move :: Board -> Position -> Position -> Board
-move board a b = maybe board (\piece -> place (remove board a) piece b) $ board `at` a
+move :: Position -> Position -> Board -> Board
+move a b = (on a &&& remove a) >>> (\(piece, board) -> board &
+    case piece of 
+        Nothing -> id
+        Just piece -> place piece b
+    )
 
 empty :: Board
 empty = []
 
-start :: Board
-start = 
-    black back `row` R8 ++ 
-    black front `row` R7 ++ 
+initial :: Board
+initial =
+    black back `row` R8 ++
+    black front `row` R7 ++
     white front `row` R2 ++
     white back `row` R1
 

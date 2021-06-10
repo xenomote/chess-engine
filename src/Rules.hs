@@ -23,6 +23,7 @@ rook
 pawn step
 pawn double step - only on first move
 pawn take
+promotion - choose which piece to promote to
 en passant - only on the move after a double move
 castling - only if the rook and king havent moved, cannot castle through check, can castle with rook under attack
 -}
