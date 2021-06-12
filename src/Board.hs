@@ -1,5 +1,5 @@
 module Board (
-    Board, on, place, remove, move, empty, initial,
+    Board, on, side, place, remove, move, empty, initial,
 ) where
 
 import Data.List ( find )
@@ -8,12 +8,15 @@ import Control.Arrow ( Arrow((&&&)), (>>>) )
 
 import Sequence ( Sequence(values) )
 import Position ( Rank(R1, R8, R7, R2), Position(Position) )
-import Piece ( Colour(Black, White), Kind(Pawn, King, Queen, Bishop, Knight, Rook), Piece(Piece) )
+import Piece
 
 type Board = [(Piece, Position)]
 
 on :: Position -> Board -> Maybe Piece
 position `on` board = fst <$> find ((== position) . snd) board
+
+side :: Colour -> Board -> [(Piece, Position)]
+side colour = filter ((==) colour . Piece.colour . fst)
 
 place :: Piece -> Position -> Board -> Board
 place piece position board = (:) (piece, position) $ remove position board

@@ -31,12 +31,15 @@ data Move = Move {
 move :: (Int, Int) -> Move
 move (x, y) = Move x y
 
+reverse :: Move -> Move
+reverse (Move x y) = Move (-x) (-y)
+
 to :: Position -> Position -> Move
 Position f1 r1 `to` Position f2 r2 = Move (f2 - f1) (r2 - r1)
     where a - b = fromEnum a Prelude.- fromEnum b
 
 from :: Move -> Position -> Maybe Position
-Move x y `from` Position f r = do 
+Move x y `from` Position f r = do
     f <- step x f
     r <- step y r
     return $ Position f r

@@ -2,9 +2,9 @@
 
 module Game where
 
-import Board ( Board )
-import qualified Board ( initial )
+import Board
 
+import Util
 import Piece
 import Position
 
@@ -29,38 +29,74 @@ inCheckMate = null . moves
 inCheck = undefined
 
 moves :: Chess -> [Chess]
-moves = undefined 
+moves state = filter inCheck moves
+    where
+        moves = undefined
+        
+        pieces = side active . board $ state
+        active = player state
+        next = state {
+            player = opposite active,
+            doubleStepped = Nothing
+        }
 
 -- list of (infinite) move sequences to be tried in order until they are blocked
 movements :: Piece -> [[Move]]
 movements (Piece colour kind) = movements kind
     where
         movements Pawn   = [[Move 0 $ if isWhite colour then 1 else -1]]
+        movements King   = map (take 1) cardinal
+        movements Queen  = cardinal
         movements Bishop = diagonal
         movements Rook   = orthogonal
-        movements Queen  = orthogonal ||| diagonal
-        movements King   = [[Move x y] |
-            x <- [-1 .. 1],
-            y <- [-1 .. 1],
-            (x, y) /= (0, 0)]
         movements Knight = [[Move x y] |
             a <- [1, -1],
             b <- [2, -2],
             (x, y) <- [(a, b), (b, a)]]
 
-        orthogonal = [
-            steps (,0),
-            steps (0,),
-            steps $ \x -> (-x, 0),
-            steps $ \y -> (0, -y)]
+-- list of (infinite) move sequences to be tried in order until there is a capture
+captures :: Piece -> [[Move]]
+captures (Piece colour Pawn) = [[Move x $ if isWhite colour then 1 else -1] | x <- [1, -1]]
+captures piece = movements piece
 
-        diagonal = [
-            steps $ \d -> (d, d),
-            steps $ \d -> (-d, d),
-            steps $ \d -> (-d, -d),
-            steps $ \d -> (d, -d)]
+-- vertical and horizontal movements, starting right, anticlockwise
+orthogonal :: [[Move]]
+orthogonal = [
+    steps (,0),
+    steps (0,),
+    steps $ \x -> (-x, 0),
+    steps $ \y -> (0, -y)]
 
-        steps f = map (move . f) [1 ..]
+-- diagonal movements, starting up right, anticlockwise
+diagonal :: [[Move]]
+diagonal = [
+    steps $ \d -> (d, d),
+    steps $ \d -> (-d, d),
+    steps $ \d -> (-d, -d),
+    steps $ \d -> (d, -d)]
 
-        (x : xs) ||| ys = x : ys ||| xs
-        []       ||| ys = ys
+-- both diagonal, vetical and horizontal movements, starting right, anticlockwise
+cardinal :: [[Move]]
+cardinal = orthogonal ||| diagonal
+
+-- generate an infinite sequence of moves based on a sequence nubmer
+steps :: (Int  -> (Int, Int)) -> [Move]
+steps f = map (Position.move . f) [1 ..]
+
+{-
+
+king move & take
+queen move & take
+bishop move $ take
+knight move & take - not blocked
+rook move & take
+
+pawn move
+pawn double step - only from initial position
+pawn take - only when piece available
+en passant - only immediately after the pawn double stepped
+promotion - only when pawn reaches the rear rank
+
+castling - only if the king and castle have not moved
+
+-}
