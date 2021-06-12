@@ -2,7 +2,7 @@ module Position (
     File(..),
     Rank(..),
     Position(..),
-    Move(..), to, from,
+    Move(..), move, to, from,
 ) where
 
 import Sequence ( Sequence, step )
@@ -27,6 +27,9 @@ data Move = Move {
     rankdiff :: Int
 }
     deriving (Eq, Show, Read)
+
+move :: (Int, Int) -> Move
+move (x, y) = Move x y
 
 to :: Position -> Position -> Move
 Position f1 r1 `to` Position f2 r2 = Move (f2 - f1) (r2 - r1)

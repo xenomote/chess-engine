@@ -1,5 +1,5 @@
 module Piece (
-    Colour(..), isWhite, isBlack,
+    Colour(..), opposite, isWhite, isBlack,
     Kind(..), isKing, isQueen, isPawn, isRook, isKnight, isBishop,
     Piece(..), sameColour, sameKind,
 ) where
@@ -10,6 +10,10 @@ data Colour = White | Black
 isWhite, isBlack :: Colour -> Bool
 isWhite = (==) White
 isBlack = (==) Black
+
+opposite :: Colour -> Colour
+opposite White = Black
+opposite Black = White
 
 data Kind = King | Queen | Bishop | Knight | Rook | Pawn 
     deriving (Eq, Read, Show)

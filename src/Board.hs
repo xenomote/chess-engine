@@ -28,10 +28,8 @@ move a b = (on a &&& remove a) >>> (\(piece, board) -> board &
         Just piece -> place piece b
     )
 
-empty :: Board
+empty, initial :: Board
 empty = []
-
-initial :: Board
 initial =
     black back `row` R8 ++
     black front `row` R7 ++

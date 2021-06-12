@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f16fec319e59bc8be28b703c1e55533ba9d141796ce7eaa71bef90cf05c134d3
+-- hash: dc794476f2c9dce0a1ce4dc403ae8abb2f2f0d55b1ec861202e36b63f738b6e8
 
 name:           chess-engine
 version:        0.1.0.0
@@ -28,10 +28,11 @@ source-repository head
 library
   exposed-modules:
       Board
-      MinMax
+      Game
       Piece
+      Player
       Position
-      Rules
+      Search
       Sequence
       Util
   other-modules:
