@@ -1,0 +1,33 @@
+digraph chess_program {
+    compound = true
+
+    subgraph cluster_inputs {
+        label = "inputs"
+        labelloc = t
+        rank = source
+
+        "resign"
+        "undo"
+        "moves in"
+        "cache in"
+        "storage"
+    }
+
+    subgraph cluster_outputs {
+        label = "outputs"
+        labelloc = b
+        rank = sink
+
+        "moves out"
+        "cache out"
+        "display"
+    }
+
+    {"moves in" "undo" "resign"} -> "game state"
+    {"storage" "cache in"} -> "engine"
+
+    "game state" -> "engine"
+
+    "engine" -> {"cache out" "moves out"}
+    {"game state" "engine"} -> "display"
+}
