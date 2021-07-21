@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: dc794476f2c9dce0a1ce4dc403ae8abb2f2f0d55b1ec861202e36b63f738b6e8
+-- hash: f54b04f9000a2ec79d53c80e1dfa1a1102063e503fd0fc139f4d7d92ede5390a
 
 name:           chess-engine
 version:        0.1.0.0
@@ -29,6 +29,10 @@ library
   exposed-modules:
       Board
       Game
+      Game.Inputs
+      Game.Manager
+      Game.Outputs
+      Game.Position
       Piece
       Player
       Position
